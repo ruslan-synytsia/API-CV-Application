@@ -5,17 +5,27 @@ const ejs = require('ejs');
 
 class Mailer {
     constructor() {
-        this.transporter = nodemailer.createTransport({
+        const port = Number(process.env.SMTP_PORT) || 587;
+        const isSecure = port === 465;
+        const transportOptions = {
             host: process.env.SMTP_HOST,
-            port: process.env.SMTP_PORT,
-            tls:{
-                rejectUnauthorized: false
-            },
-            secure: true,
+            port,
+            secure: isSecure,
+            requireTLS: !isSecure,
             auth: {
                 user: process.env.SMTP_USER,
                 pass: process.env.SMTP_PASSWORD
             }
+        };
+
+        if (isSecure) {
+            transportOptions.tls = {
+                rejectUnauthorized: false
+            };
+        }
+
+        this.transporter = nodemailer.createTransport({
+            ...transportOptions
         });
     }
 
