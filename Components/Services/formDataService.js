@@ -14,7 +14,7 @@ class FormDataService {
       return newMessage;
     } catch (err) {
       console.error("Mongo save error:", err);
-      throw err; // 🔴 КЛЮЧЕВО
+      throw err;
     }
   }
 }
