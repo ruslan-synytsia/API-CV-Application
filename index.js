@@ -28,26 +28,26 @@ app.use('/api', formDataRouter);
 
 // Подключение к MongoDB
 // ---- Mongo debug / no-illusion settings ----
-mongoose.set("bufferCommands", false); // чтобы не было "как будто сохранилось"
+mongoose.set("bufferCommands", false);
 mongoose.connection.on("connected", () => {
   console.log("Mongo connected ✅");
   console.log("Mongo host:", mongoose.connection.host);
   console.log("Mongo db:", mongoose.connection.name);
 });
-mongoose.connection.on("error", (e) => console.log("Mongo error ❌", e));
+mongoose.connection.on("error", (e) => console.log("Mongo error", e));
 mongoose.connection.on("disconnected", () => console.log("Mongo disconnected ⚠️"));
 
 const mongoUri = process.env.DB_MONGO_URL;
 if (!mongoUri) {
-  console.error("DB_MONGO_URL is missing ❌");
+  console.error("DB_MONGO_URL is missing");
   process.exit(1);
 }
 
 // Подключение к MongoDB
 mongoose
   .connect(mongoUri, {
-    dbName: "cv-application",            // 👈 принудительно
-    serverSelectionTimeoutMS: 8000,      // 👈 чтобы не висеть вечность
+    dbName: "cv-application",
+    serverSelectionTimeoutMS: 8000,
     socketTimeoutMS: 20000,
   })
   .then(async () => {
@@ -62,6 +62,6 @@ mongoose
     app.listen(PORT, () => console.log("Сервер запущен на порту:", PORT));
   })
   .catch((err) => {
-    console.error("Ошибка подключения к MongoDB ❌", err);
+    console.error("Ошибка подключения к MongoDB", err);
     process.exit(1);
   });
