@@ -5,17 +5,15 @@ const ejs = require("ejs");
 
 class Mailer {
   constructor() {
-    this.transporter = nodemailer.createTransport({
+        this.transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",
-      port: 465,
-      secure: true,
+      port: process.env.SMTP_PORT,
+      secure: false,
+      requireTLS: true,
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASSWORD,
       },
-      connectionTimeout: 10000,
-      greetingTimeout: 10000,
-      socketTimeout: 20000,
     });
 
     // 🔍 Диагностика при старте
