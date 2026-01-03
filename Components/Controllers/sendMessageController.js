@@ -7,10 +7,11 @@ class sendMessageController {
 
     try {
       const saved = await formDataService.createMessage({ username, email, message });
+      const mailer = new Mailer();
+      const adminTo = process.env.RESEND_ADMIN_EMAIL;
 
-      new Mailer().sendMail({
-        from: "",
-        to: process.env.SMTP_USER,
+      mailer.sendMail({
+        to: adminTo,
         email,
         username,
         subject: "Message from CV",
@@ -18,8 +19,7 @@ class sendMessageController {
         temp: "mail-template",
       }).catch(console.error);
 
-      new Mailer().sendMail({
-        from: "Ruslan Synytsia <synytsiaruslan@gmail.com>",
+      mailer.sendMail({
         to: email,
         email: "",
         username,
