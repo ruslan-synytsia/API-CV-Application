@@ -14,10 +14,16 @@ const isValidEmail = (value) => {
 
 class sendMessageController {
   async sendMessage(req, res) {
-    const { username, email, message } = req.body;
+    const payload =
+      req.body && Object.keys(req.body).length > 0 ? req.body : req.query;
+    const { username = "", email = "", message = "" } = payload;
 
     try {
-      const saved = await formDataService.createMessage({ username, email, message });
+      const saved = await formDataService.createMessage({
+        username,
+        email,
+        message,
+      });
       const mailer = new Mailer();
       const adminTo = process.env.RESEND_ADMIN_EMAIL;
       const senderEmail = normalizeEmail(email);

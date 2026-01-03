@@ -19,6 +19,14 @@ const getDomain = (email) => {
 
 const isBlank = (value) => !value || !String(value).trim();
 
+const stripHtml = (value) =>
+  String(value || '')
+    .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, ' ')
+    .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, ' ')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
 const buildDefaultFrom = (fromEnv, domain) => {
   const trimmedFrom = String(fromEnv || '').trim();
   if (trimmedFrom) return trimmedFrom;
@@ -98,12 +106,14 @@ class Mailer {
       subject,
       message
     });
+    const text = stripHtml(html);
 
     const payload = {
       from: resolvedFrom,
       to,
       subject,
-      html
+      html,
+      text
     };
 
     const replyTo = extractEmail(email || '');

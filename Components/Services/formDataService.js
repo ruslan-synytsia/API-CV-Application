@@ -1,4 +1,4 @@
-const Message = require('../Models/Message.js');
+const Message = require("../Models/Message.js");
 
 class FormDataService {
   async createMessage(data) {
